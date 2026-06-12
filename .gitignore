@@ -25,6 +25,7 @@ frontend/out/
 frontend/build/
 frontend/coverage/
 frontend/next-env.d.ts
+node_modules
 
 # ── Logs ─────────────────────────────────────────────────────
 logs/
