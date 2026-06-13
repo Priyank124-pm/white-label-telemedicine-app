@@ -9,54 +9,59 @@ export const PERMISSIONS: Record<string, Role[]> = {
   'tenant:delete':  ['super_admin'],
 
   // Doctor management
-  'doctor:create':  ['super_admin'],
-  'doctor:read':    ['super_admin', 'doctor', 'patient', 'pharmacy'],
-  'doctor:update':  ['super_admin', 'doctor'],
-  'doctor:delete':  ['super_admin'],
+  'doctor:create':  ['super_admin', 'clinic_admin'],
+  'doctor:read':    ['super_admin', 'clinic_admin', 'doctor', 'patient', 'pharmacy'],
+  'doctor:update':  ['super_admin', 'clinic_admin', 'doctor'],
+  'doctor:delete':  ['super_admin', 'clinic_admin'],
 
   // Patient management
-  'patient:create': ['super_admin', 'doctor'],
-  'patient:read':   ['super_admin', 'doctor', 'patient', 'pharmacy'],
-  'patient:update': ['super_admin', 'doctor', 'patient'],
-  'patient:delete': ['super_admin'],
+  'patient:create': ['super_admin', 'clinic_admin', 'doctor'],
+  'patient:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient', 'pharmacy'],
+  'patient:update': ['super_admin', 'clinic_admin', 'doctor', 'patient'],
+  'patient:delete': ['super_admin', 'clinic_admin'],
+
+  // Pharmacy management
+  'pharmacy:create': ['super_admin', 'clinic_admin'],
+  'pharmacy:read':   ['super_admin', 'clinic_admin'],
+  'pharmacy:delete': ['super_admin', 'clinic_admin'],
 
   // Appointment management
   'appointment:create': ['super_admin', 'doctor', 'patient'],
-  'appointment:read':   ['super_admin', 'doctor', 'patient'],
+  'appointment:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient'],
   'appointment:update': ['super_admin', 'doctor', 'patient'],
   'appointment:delete': ['super_admin', 'doctor'],
 
   // Prescription management
   'prescription:create': ['doctor'],
-  'prescription:read':   ['super_admin', 'doctor', 'patient', 'pharmacy'],
+  'prescription:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient', 'pharmacy'],
   'prescription:update': ['doctor'],
   'prescription:delete': ['super_admin', 'doctor'],
 
   // Medicine management
   'medicine:create': ['super_admin'],
-  'medicine:read':   ['super_admin', 'doctor', 'patient', 'pharmacy'],
+  'medicine:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient', 'pharmacy'],
   'medicine:update': ['super_admin'],
   'medicine:delete': ['super_admin'],
 
   // Report management
   'report:create': ['doctor'],
-  'report:read':   ['super_admin', 'doctor', 'patient'],
+  'report:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient'],
   'report:update': ['doctor'],
   'report:delete': ['super_admin', 'doctor'],
 
   // Referral management
   'referral:create': ['doctor'],
-  'referral:read':   ['super_admin', 'doctor', 'patient'],
+  'referral:read':   ['super_admin', 'clinic_admin', 'doctor', 'patient'],
   'referral:update': ['doctor'],
 
   // Pharmacy operations
   'dispensing:create': ['pharmacy'],
-  'dispensing:read':   ['super_admin', 'pharmacy', 'doctor'],
+  'dispensing:read':   ['super_admin', 'clinic_admin', 'pharmacy', 'doctor'],
   'invoice:create':    ['pharmacy'],
-  'invoice:read':      ['super_admin', 'pharmacy', 'patient'],
+  'invoice:read':      ['super_admin', 'clinic_admin', 'pharmacy', 'patient'],
 
   // Analytics
-  'analytics:read': ['super_admin'],
+  'analytics:read': ['super_admin', 'clinic_admin'],
 };
 
 export function authorize(...allowedRoles: Role[]) {

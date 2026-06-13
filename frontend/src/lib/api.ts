@@ -53,12 +53,26 @@ export const authApi = {
   changePassword: (data: object) => api.put('/auth/change-password', data),
 };
 
+// Clinic Admin
+export const clinicAdminApi = {
+  getDashboard:      () => api.get('/clinic/dashboard'),
+  getDoctors:        (params?: object) => api.get('/clinic/doctors', { params }),
+  createDoctor:      (data: object) => api.post('/clinic/doctors', data),
+  updateDoctor:      (id: string, data: object) => api.put(`/clinic/doctors/${id}`, data),
+  deleteDoctor:      (id: string) => api.delete(`/clinic/doctors/${id}`),
+  getPharmacies:     (params?: object) => api.get('/clinic/pharmacies', { params }),
+  createPharmacy:    (data: object) => api.post('/clinic/pharmacies', data),
+  deletePharmacy:    (id: string) => api.delete(`/clinic/pharmacies/${id}`),
+  getPatients:       (params?: object) => api.get('/clinic/patients', { params }),
+};
+
 // Admin
 export const adminApi = {
   getTenants:     (params?: object) => api.get('/admin/tenants', { params }),
   createTenant:   (data: object) => api.post('/admin/tenants', data),
   updateTenant:   (id: string, data: object) => api.put(`/admin/tenants/${id}`, data),
   deleteTenant:   (id: string) => api.delete(`/admin/tenants/${id}`),
+  toggleTenant:   (id: string) => api.patch(`/admin/tenants/${id}/toggle`),
   getDoctors:     (params?: object) => api.get('/admin/doctors', { params }),
   createDoctor:   (data: object) => api.post('/admin/doctors', data),
   getPatients:    (params?: object) => api.get('/admin/patients', { params }),

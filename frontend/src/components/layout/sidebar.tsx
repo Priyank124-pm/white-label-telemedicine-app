@@ -18,6 +18,12 @@ interface NavItem {
 }
 
 const navByRole: Record<string, NavItem[]> = {
+  clinic_admin: [
+    { href: '/clinic-admin',             label: 'Dashboard',  icon: <LayoutDashboard size={18} /> },
+    { href: '/clinic-admin/doctors',     label: 'Doctors',    icon: <Stethoscope size={18} /> },
+    { href: '/clinic-admin/pharmacies',  label: 'Pharmacies', icon: <Package size={18} /> },
+    { href: '/clinic-admin/patients',    label: 'Patients',   icon: <Users size={18} /> },
+  ],
   super_admin: [
     { href: '/super-admin',            label: 'Dashboard',  icon: <LayoutDashboard size={18} /> },
     { href: '/super-admin/clinics',    label: 'Clinics',    icon: <Building2 size={18} /> },
@@ -32,7 +38,6 @@ const navByRole: Record<string, NavItem[]> = {
     { href: '/doctor/patients',      label: 'Patients',     icon: <Users size={18} /> },
     { href: '/doctor/appointments',  label: 'Appointments', icon: <Calendar size={18} /> },
     { href: '/doctor/prescriptions', label: 'Prescriptions',icon: <ClipboardList size={18} /> },
-    { href: '/doctor/reports',       label: 'Reports',      icon: <FlaskConical size={18} /> },
     { href: '/doctor/referrals',     label: 'Referrals',    icon: <Send size={18} /> },
     { href: '/doctor/availability',  label: 'Availability', icon: <Clock size={18} /> },
     { href: '/doctor/my-site',       label: 'My Website',   icon: <Globe size={18} /> },
@@ -41,7 +46,6 @@ const navByRole: Record<string, NavItem[]> = {
     { href: '/patient',               label: 'Dashboard',    icon: <LayoutDashboard size={18} /> },
     { href: '/patient/appointments',  label: 'Appointments', icon: <Calendar size={18} /> },
     { href: '/patient/prescriptions', label: 'Prescriptions',icon: <FileText size={18} /> },
-    { href: '/patient/reports',       label: 'Reports',      icon: <FlaskConical size={18} /> },
   ],
   pharmacy: [
     { href: '/pharmacy',               label: 'Dashboard',    icon: <LayoutDashboard size={18} /> },
@@ -52,17 +56,19 @@ const navByRole: Record<string, NavItem[]> = {
 };
 
 const roleLabels: Record<string, string> = {
-  super_admin: 'Super Admin',
-  doctor:      'Doctor',
-  patient:     'Patient',
-  pharmacy:    'Pharmacy',
+  super_admin:  'Super Admin',
+  clinic_admin: 'Clinic Admin',
+  doctor:       'Doctor',
+  patient:      'Patient',
+  pharmacy:     'Pharmacy',
 };
 
 const roleColors: Record<string, string> = {
-  super_admin: 'from-violet-500 to-purple-600',
-  doctor:      'from-sky-500 to-cyan-600',
-  patient:     'from-emerald-500 to-teal-600',
-  pharmacy:    'from-orange-500 to-amber-600',
+  super_admin:  'from-violet-500 to-purple-600',
+  clinic_admin: 'from-rose-500 to-pink-600',
+  doctor:       'from-sky-500 to-cyan-600',
+  patient:      'from-emerald-500 to-teal-600',
+  pharmacy:     'from-orange-500 to-amber-600',
 };
 
 export function Sidebar() {
@@ -112,8 +118,11 @@ export function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 py-3 overflow-y-auto space-y-0.5">
-        {items.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + '/');
+        {items.map((item, idx) => {
+          const isDashboard = idx === 0;
+          const active = isDashboard
+            ? pathname === item.href
+            : pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link
               key={item.href}

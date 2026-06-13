@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Package } from 'lucide-react';
+import { Plus, Package, Eye, X } from 'lucide-react';
 
 export default function PharmaciesPage() {
   const [pharmacies, setPharmacies] = useState<Record<string, unknown>[]>([]);
@@ -20,6 +20,7 @@ export default function PharmaciesPage() {
   const [search,     setSearch]     = useState('');
   const [loading,    setLoading]    = useState(true);
   const [showForm,   setShowForm]   = useState(false);
+  const [viewPh,     setViewPh]     = useState<Record<string, unknown> | null>(null);
   const [form, setForm] = useState({ email: '', firstName: '', lastName: '', phone: '', tenantId: '', pharmacyName: '', licenseNumber: '', address: '' });
 
   const load = useCallback(async () => {
@@ -53,7 +54,10 @@ export default function PharmaciesPage() {
     { key: 'email',          header: 'Email' },
     { key: 'phone',          header: 'Phone' },
     { key: 'license_number', header: 'License' },
-    { key: 'is_active',      header: 'Status', render: (v: unknown) => <Badge className={v ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{v ? 'Active' : 'Inactive'}</Badge> },
+    { key: 'is_active', header: 'Status', render: (v: unknown) => <Badge className={v ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{v ? 'Active' : 'Inactive'}</Badge> },
+    { key: 'id', header: '', render: (_: unknown, r: Record<string, unknown>) => (
+      <Button size="sm" variant="outline" onClick={() => setViewPh(r)}><Eye size={14} className="mr-1" />View</Button>
+    )},
   ];
 
   return (
@@ -90,6 +94,27 @@ export default function PharmaciesPage() {
           <div className="p-4"><Pagination page={page} totalPages={meta.totalPages} onPageChange={setPage} /></div>
         </CardContent>
       </Card>
+
+      {viewPh && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.45)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between p-5 border-b">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center"><Package size={18} className="text-purple-600" /></div>
+                <div><p className="font-bold">{viewPh.pharmacy_name as string}</p><p className="text-xs text-muted-foreground">{viewPh.email as string}</p></div>
+              </div>
+              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setViewPh(null)}><X size={16} /></Button>
+            </div>
+            <div className="p-5 space-y-3 text-sm">
+              {[['Manager', null],['Phone','phone'],['License','license_number'],['Address','address']].map(([label, key]) => {
+                if (!key) return <div key="manager" className="flex justify-between"><span className="text-muted-foreground">Manager</span><span className="font-medium">{viewPh.first_name as string} {viewPh.last_name as string}</span></div>;
+                return viewPh[key] ? <div key={key} className="flex justify-between"><span className="text-muted-foreground">{label}</span><span className="font-medium">{viewPh[key] as string}</span></div> : null;
+              })}
+              <div className="flex justify-between"><span className="text-muted-foreground">Status</span><Badge className={viewPh.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{viewPh.is_active ? 'Active' : 'Inactive'}</Badge></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

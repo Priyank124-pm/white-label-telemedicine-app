@@ -26,10 +26,11 @@ export function isAuthenticated(): boolean {
 
 export function getDashboardPath(role: string): string {
   switch (role) {
-    case 'super_admin': return '/super-admin';
-    case 'doctor':      return '/doctor';
-    case 'patient':     return '/patient';
-    case 'pharmacy':    return '/pharmacy';
-    default:            return '/login';
+    case 'super_admin':  return '/super-admin';
+    case 'clinic_admin': return '/clinic-admin';
+    case 'doctor':       return '/doctor';
+    case 'patient':      return '/patient';
+    case 'pharmacy':     return '/pharmacy';
+    default:             return '/login';
   }
 }

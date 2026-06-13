@@ -4,9 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { pharmacyApi } from '@/lib/api';
 import { DataTable } from '@/components/ui/data-table';
 import { Pagination } from '@/components/ui/pagination';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { formatDate, formatCurrency, getStatusColor } from '@/lib/utils';
+import { formatDate, formatCurrency } from '@/lib/utils';
 
 export default function PharmacyInvoicesPage() {
   const [invoices, setInvoices] = useState<Record<string, unknown>[]>([]);
@@ -32,7 +31,6 @@ export default function PharmacyInvoicesPage() {
     { key: 'subtotal',      header: 'Subtotal',     render: (v: unknown) => formatCurrency(v as number) },
     { key: 'tax_amount',    header: 'Tax',          render: (v: unknown) => formatCurrency(v as number) },
     { key: 'total_amount',  header: 'Total',        render: (v: unknown) => <span className="font-bold">{formatCurrency(v as number)}</span> },
-    { key: 'status',        header: 'Status',       render: (v: unknown) => <Badge className={getStatusColor(v as string)}>{v as string}</Badge> },
     { key: 'created_at',    header: 'Date',         render: (v: unknown) => formatDate(v as string) },
   ];
 

@@ -51,7 +51,14 @@
       "Bash(lsof -i :3001 -sTCP:LISTEN)",
       "Bash(lsof -i :3002 -sTCP:LISTEN)",
       "Bash(curl -s -X POST http://localhost:5001/api/v1/auth/login -H 'Content-Type: application/json' -H 'Origin: http://localhost:3000' -d '{\"email\":\"admin@doctorsaas.com\",\"password\":\"Admin@123\"}')",
-      "Bash(curl -s \"http://localhost:3000/api/v1/auth/login\")"
+      "Bash(curl -s \"http://localhost:3000/api/v1/auth/login\")",
+      "Bash(mysql -u root -pitechnolabs doctor_saas -e \"ALTER TABLE users MODIFY COLUMN role ENUM\\('super_admin','clinic_admin','doctor','patient','pharmacy'\\) NOT NULL;\")",
+      "Bash(/opt/homebrew/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT id, name, slug FROM tenants LIMIT 3;\")",
+      "Bash(find /usr/local /opt -name \"mysql\" -type f 2>/dev/null | head -5; which mysql 2>/dev/null)",
+      "Read(//usr/local/**)",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e 'SELECT id, name FROM tenants LIMIT 3;')",
+      "Bash(node -e \"const bcrypt = require\\('bcrypt'\\); bcrypt.hash\\('Clinic@123', 12\\).then\\(h => console.log\\(h\\)\\);\")",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e 'SELECT id, email, role, first_name, last_name, tenant_id FROM users WHERE role='\\\\''clinic_admin'\\\\'';')"
     ]
   }
 }

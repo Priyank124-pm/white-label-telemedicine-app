@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-export type Role = 'super_admin' | 'doctor' | 'patient' | 'pharmacy';
+export type Role = 'super_admin' | 'clinic_admin' | 'doctor' | 'patient' | 'pharmacy';
 
 export interface AuthUser {
   userId:   string;

@@ -72,13 +72,12 @@ export default function PharmacyPrescriptionsPage() {
     { key: 'doctor_name',     header: 'Doctor',     render: (v: unknown) => <span>Dr. {v as string}</span> },
     { key: 'diagnosis',       header: 'Diagnosis',  render: (v: unknown) => <span className="text-xs">{v as string}</span> },
     { key: 'created_at',      header: 'Issued',     render: (v: unknown) => formatDate(v as string) },
-    { key: 'status',          header: 'Status',     render: (v: unknown) => <Badge className={getStatusColor(v as string)}>{v as string}</Badge> },
     { key: 'id',              header: '',           render: (id: unknown, row: Record<string, unknown>) => (
       row.status === 'active'
         ? <Button size="sm" onClick={() => router.push(`/pharmacy/dispensing?prescriptionId=${id}`)}>
             Dispense <ChevronRight size={14} className="ml-1" />
           </Button>
-        : <span className="text-xs text-muted-foreground capitalize">{row.status as string}</span>
+        : null
     )},
   ];
 

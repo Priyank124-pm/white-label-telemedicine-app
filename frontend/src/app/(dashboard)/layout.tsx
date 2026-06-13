@@ -8,7 +8,11 @@ import { Header } from '@/components/layout/header';
 import { isAuthenticated } from '@/lib/auth';
 
 const PAGE_TITLES: Record<string, string> = {
-  '/super-admin':             'Dashboard',
+  '/clinic-admin':                'Clinic Dashboard',
+  '/clinic-admin/doctors':        'Manage Doctors',
+  '/clinic-admin/pharmacies':     'Manage Pharmacies',
+  '/clinic-admin/patients':       'Clinic Patients',
+  '/super-admin':                 'Dashboard',
   '/super-admin/clinics':     'Manage Clinics',
   '/super-admin/doctors':     'Manage Doctors',
   '/super-admin/patients':    'Manage Patients',

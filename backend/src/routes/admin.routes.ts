@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authenticate } from '../middlewares/auth';
 import { authorize } from '../middlewares/rbac';
 import {
-  getTenants, createTenant, updateTenant, deleteTenant,
+  getTenants, createTenant, updateTenant, deleteTenant, toggleTenantStatus,
   getDoctors, createDoctor,
   getPatients,
   getPharmacies, createPharmacy,
@@ -15,10 +15,11 @@ const router = Router();
 router.use(authenticate, authorize('super_admin'));
 
 // Tenants / Clinics
-router.get('/tenants',       getTenants);
-router.post('/tenants',      createTenant);
-router.put('/tenants/:id',   updateTenant);
-router.delete('/tenants/:id', deleteTenant);
+router.get('/tenants',              getTenants);
+router.post('/tenants',             createTenant);
+router.put('/tenants/:id',          updateTenant);
+router.patch('/tenants/:id/toggle', toggleTenantStatus);
+router.delete('/tenants/:id',       deleteTenant);
 
 // Doctors
 router.get('/doctors',  getDoctors);

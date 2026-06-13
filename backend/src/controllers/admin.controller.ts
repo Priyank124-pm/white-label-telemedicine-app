@@ -30,19 +30,42 @@ export async function getTenants(req: AuthRequest, res: Response, next: NextFunc
 
 export async function createTenant(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   try {
-    const { name, slug, address, city, state, country, phone, email } = req.body;
+    const { name, slug, address, city, state, country, phone, email,
+            adminEmail, adminPassword, adminFirstName, adminLastName } = req.body;
+
+    if (!adminEmail || !adminPassword || !adminFirstName || !adminLastName) {
+      throw createError('Clinic admin credentials (adminEmail, adminPassword, adminFirstName, adminLastName) are required', 400);
+    }
 
     const existing = await query<unknown[]>(`SELECT id FROM tenants WHERE slug = ?`, [slug]);
     if (existing.length) throw createError('Slug already in use', 409);
 
-    const id = generateId();
+    const adminExists = await query<unknown[]>(`SELECT id FROM users WHERE email = ?`, [adminEmail]);
+    if (adminExists.length) throw createError('Admin email already registered', 409);
+
+    const tenantId = generateId();
     await query(
       `INSERT INTO tenants (id, name, slug, address, city, state, country, phone, email) VALUES (?,?,?,?,?,?,?,?,?)`,
-      [id, name, slug, address, city, state, country || 'Canada', phone, email]
+      [tenantId, name, slug, address, city, state, country || 'Canada', phone, email]
     );
 
-    const rows = await query<unknown[]>(`SELECT * FROM tenants WHERE id = ?`, [id]);
-    res.status(201).json({ success: true, message: 'Clinic created', data: rows[0] });
+    const hash   = await bcrypt.hash(adminPassword, 12);
+    const userId = generateId();
+    await query(
+      `INSERT INTO users (id, tenant_id, role, email, password_hash, first_name, last_name, is_verified)
+       VALUES (?,?,'clinic_admin',?,?,?,?,1)`,
+      [userId, tenantId, adminEmail, hash, adminFirstName, adminLastName]
+    );
+
+    const tenant = await query<unknown[]>(`SELECT * FROM tenants WHERE id = ?`, [tenantId]);
+    res.status(201).json({
+      success: true,
+      message: 'Clinic created with admin account',
+      data: {
+        clinic: tenant[0],
+        admin: { email: adminEmail, firstName: adminFirstName, lastName: adminLastName, userId },
+      },
+    });
   } catch (err) { next(err); }
 }
 
@@ -278,6 +301,15 @@ export async function getAnalytics(req: AuthRequest, res: Response, next: NextFu
         recentAppointments,
       },
     });
+  } catch (err) { next(err); }
+}
+
+export async function toggleTenantStatus(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { id } = req.params;
+    await query(`UPDATE tenants SET is_active = NOT is_active WHERE id = ?`, [id]);
+    const rows = await query<Array<{ is_active: number }>>(`SELECT is_active FROM tenants WHERE id = ?`, [id]);
+    res.json({ success: true, message: 'Clinic status updated', data: { isActive: rows[0]?.is_active } });
   } catch (err) { next(err); }
 }
 

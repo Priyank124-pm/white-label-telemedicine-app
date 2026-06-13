@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { formatDate, formatTime, getStatusColor } from '@/lib/utils';
 
-const STATUSES = ['', 'pending', 'confirmed', 'completed', 'cancelled', 'no_show'];
+const STATUSES = ['', 'pending', 'confirmed', 'completed', 'cancelled'];
 
 export default function DoctorAppointmentsPage() {
   const [appts,   setAppts]   = useState<Record<string, unknown>[]>([]);

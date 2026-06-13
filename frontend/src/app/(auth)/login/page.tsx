@@ -23,7 +23,6 @@ type FormData = z.infer<typeof schema>;
 
 const FEATURES = [
   { icon: <Stethoscope size={20} />, title: 'Smart Scheduling', desc: 'AI-powered appointment management for doctors and patients' },
-  { icon: <ShieldCheck size={20} />,  title: 'Secure Records',   desc: 'HIPAA-compliant electronic health records with encryption' },
   { icon: <Clock size={20} />,        title: 'Real-time Updates', desc: 'Instant notifications for prescriptions and lab results' },
   { icon: <Users size={20} />,        title: 'Multi-role Access', desc: 'Unified platform for clinics, doctors, patients & pharmacies' },
 ];
@@ -129,7 +128,7 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" autoComplete="off">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-slate-700 font-medium text-sm">Email address</Label>
               <Input
@@ -182,17 +181,6 @@ export default function LoginPage() {
             <Link href="/register" className="text-sky-600 hover:text-sky-700 font-semibold hover:underline">
               Create an account
             </Link>
-          </div>
-
-          {/* Demo credentials */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-            <p className="text-xs font-semibold text-slate-600 mb-2 uppercase tracking-wide">Demo credentials</p>
-            <div className="space-y-1 text-xs text-slate-500">
-              <p><span className="font-medium text-slate-700">Super Admin:</span> admin@doctorsaas.com / Admin@123</p>
-              <p><span className="font-medium text-slate-700">Doctor:</span> dr.sarah.johnson@healthfirst.ca / Doctor@123</p>
-              <p><span className="font-medium text-slate-700">Patient:</span> john.doe@email.com / Patient@123</p>
-              <p><span className="font-medium text-slate-700">Pharmacy:</span> pharmacy@healthfirst.ca / Pharma@123</p>
-            </div>
           </div>
         </div>
       </div>

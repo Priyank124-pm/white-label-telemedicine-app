@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Stethoscope } from 'lucide-react';
+import { Plus, Stethoscope, Eye, X } from 'lucide-react';
 
 export default function DoctorsPage() {
   const [doctors, setDoctors] = useState<Record<string, unknown>[]>([]);
@@ -20,6 +20,7 @@ export default function DoctorsPage() {
   const [search,  setSearch]  = useState('');
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [viewDoc,  setViewDoc]  = useState<Record<string, unknown> | null>(null);
   const [form, setForm] = useState({ email: '', firstName: '', lastName: '', phone: '', tenantId: '', specialization: '', qualification: '', licenseNumber: '', experienceYears: '0', consultationFee: '0' });
 
   const load = useCallback(async () => {
@@ -63,7 +64,12 @@ export default function DoctorsPage() {
     { key: 'experience_years', header: 'Exp (yrs)' },
     { key: 'consultation_fee', header: 'Fee', render: (v: unknown) => `$${v}` },
     { key: 'is_active', header: 'Status', render: (v: unknown) => <Badge className={v ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{v ? 'Active' : 'Inactive'}</Badge> },
-    { key: 'id', header: 'Actions', render: (v: unknown) => <Button variant="outline" size="sm" onClick={() => handleToggle(v as string)}>Toggle</Button> },
+    { key: 'id', header: '', render: (v: unknown, r: Record<string, unknown>) => (
+      <div className="flex gap-1">
+        <Button size="sm" variant="outline" onClick={() => setViewDoc(r)}><Eye size={14} className="mr-1" />View</Button>
+        <Button size="sm" variant="ghost" className={r.is_active ? 'text-red-500 hover:bg-red-50' : 'text-green-600 hover:bg-green-50'} onClick={() => handleToggle(v as string)}>{r.is_active ? 'Deactivate' : 'Activate'}</Button>
+      </div>
+    )},
   ];
 
   return (
@@ -100,6 +106,26 @@ export default function DoctorsPage() {
           <div className="p-4"><Pagination page={page} totalPages={meta.totalPages} onPageChange={setPage} /></div>
         </CardContent>
       </Card>
+
+      {viewDoc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.45)' }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+            <div className="flex items-center justify-between p-5 border-b">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center"><Stethoscope size={18} className="text-indigo-600" /></div>
+                <div><p className="font-bold">Dr. {viewDoc.first_name as string} {viewDoc.last_name as string}</p><p className="text-xs text-muted-foreground">{viewDoc.specialization as string}</p></div>
+              </div>
+              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setViewDoc(null)}><X size={16} /></Button>
+            </div>
+            <div className="p-5 space-y-3 text-sm">
+              {[['Email', 'email'],['Phone','phone'],['Clinic','clinic_name'],['License','license_number'],['Qualification','qualification'],['Experience','experience_years'],['Fee','consultation_fee']].map(([label, key]) => (
+                viewDoc[key] ? <div key={key} className="flex justify-between"><span className="text-muted-foreground">{label}</span><span className="font-medium">{key === 'consultation_fee' ? `$${viewDoc[key]}` : viewDoc[key] as string}</span></div> : null
+              ))}
+              <div className="flex justify-between"><span className="text-muted-foreground">Status</span><Badge className={viewDoc.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{viewDoc.is_active ? 'Active' : 'Inactive'}</Badge></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
