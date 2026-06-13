@@ -58,7 +58,15 @@
       "Read(//usr/local/**)",
       "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e 'SELECT id, name FROM tenants LIMIT 3;')",
       "Bash(node -e \"const bcrypt = require\\('bcrypt'\\); bcrypt.hash\\('Clinic@123', 12\\).then\\(h => console.log\\(h\\)\\);\")",
-      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e 'SELECT id, email, role, first_name, last_name, tenant_id FROM users WHERE role='\\\\''clinic_admin'\\\\'';')"
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e 'SELECT id, email, role, first_name, last_name, tenant_id FROM users WHERE role='\\\\''clinic_admin'\\\\'';')",
+      "Bash(chmod +x /Users/itechnolabs/Desktop/doctor-saas/database/migrate.js)",
+      "Bash(npm install *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.get\\('dependencies',{}\\).keys\\(\\)\\)[:10]\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); deps=d.get\\('dependencies',{}\\); print\\('mysql2' in deps, deps.get\\('mysql2','NOT FOUND'\\)\\)\")",
+      "Bash(node -e \"require\\('./database/migrate.js'\\)\")",
+      "Bash(node --check database/migrate.js)",
+      "Bash(node database/migrate.js)",
+      "Bash(mysql -u root -pitechnolabs -e \"SELECT VERSION\\(\\);\")"
     ]
   }
 }

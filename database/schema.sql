@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS tenants (
 CREATE TABLE IF NOT EXISTS users (
   id              CHAR(36)      NOT NULL DEFAULT (UUID()),
   tenant_id       CHAR(36)      NULL,
-  role            ENUM('super_admin','doctor','patient','pharmacy') NOT NULL,
+  role            ENUM('super_admin','clinic_admin','doctor','patient','pharmacy') NOT NULL,
   email           VARCHAR(255)  NOT NULL,
   password_hash   VARCHAR(255)  NOT NULL,
   first_name      VARCHAR(100)  NOT NULL,
@@ -242,7 +242,6 @@ CREATE TABLE IF NOT EXISTS prescriptions (
   notes           TEXT          NULL,
   follow_up_date  DATE          NULL,
   status          ENUM('active','dispensed','expired','cancelled') NOT NULL DEFAULT 'active',
-  pdf_url         VARCHAR(500)  NULL,
   created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -290,8 +289,8 @@ CREATE TABLE IF NOT EXISTS medical_reports (
   report_type     ENUM('lab','imaging','pathology','other') NOT NULL DEFAULT 'lab',
   title           VARCHAR(255)  NOT NULL,
   description     TEXT          NULL,
-  file_url        VARCHAR(500)  NOT NULL,
-  file_name       VARCHAR(255)  NOT NULL,
+  file_url        VARCHAR(500)  NULL,
+  file_name       VARCHAR(255)  NULL,
   file_size       INT           NULL,
   report_date     DATE          NOT NULL,
   created_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -420,6 +419,16 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   INDEX idx_tenant (tenant_id),
   INDEX idx_entity (entity, entity_id),
   INDEX idx_created_at (created_at)
+) ENGINE=InnoDB;
+
+-- ============================================================
+-- SCHEMA MIGRATIONS TRACKER
+-- ============================================================
+CREATE TABLE IF NOT EXISTS schema_migrations (
+  id          INT           NOT NULL AUTO_INCREMENT,
+  filename    VARCHAR(255)  NOT NULL UNIQUE,
+  applied_at  DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
 ) ENGINE=InnoDB;
 
 SET FOREIGN_KEY_CHECKS = 1;
