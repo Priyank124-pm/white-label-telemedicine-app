@@ -26,9 +26,9 @@ export default function PatientDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatsCard title="Upcoming Appointments" value={stats?.upcomingCount     || 0} icon={<Calendar size={22} />}      color="bg-blue-500" />
-        <StatsCard title="Prescriptions"         value={stats?.totalPrescriptions || 0} icon={<FileText size={22} />}     color="bg-green-500" />
-        <StatsCard title="Reports"               value={stats?.totalReports       || 0} icon={<FlaskConical size={22} />} color="bg-purple-500" />
+        <StatsCard title="Upcoming Appointments" value={stats?.upcomingCount      || 0} icon={<Calendar size={20} />}     color="blue"   iconBg="bg-sky-500" />
+        <StatsCard title="Prescriptions"         value={stats?.totalPrescriptions || 0} icon={<FileText size={20} />}     color="green"  iconBg="bg-emerald-500" />
+        <StatsCard title="Reports"               value={stats?.totalReports       || 0} icon={<FlaskConical size={20} />} color="purple" iconBg="bg-violet-500" />
       </div>
 
       <Card>

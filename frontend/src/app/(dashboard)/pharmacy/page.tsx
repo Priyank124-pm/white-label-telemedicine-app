@@ -25,9 +25,9 @@ export default function PharmacyDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatsCard title="Total Dispensed"  value={stats?.totalDispensed  || 0} icon={<CheckCircle size={22} />} color="bg-green-500" />
-        <StatsCard title="Today Dispensed"  value={stats?.todayDispensed  || 0} icon={<Package size={22} />}     color="bg-blue-500" />
-        <StatsCard title="Pending Invoices" value={stats?.pendingInvoices || 0} icon={<Receipt size={22} />}     color="bg-orange-500" />
+        <StatsCard title="Total Dispensed"  value={stats?.totalDispensed  || 0} icon={<CheckCircle size={20} />} color="green"  iconBg="bg-emerald-500" />
+        <StatsCard title="Today Dispensed"  value={stats?.todayDispensed  || 0} icon={<Package size={20} />}     color="blue"   iconBg="bg-sky-500" />
+        <StatsCard title="Pending Invoices" value={stats?.pendingInvoices || 0} icon={<Receipt size={20} />}     color="orange" iconBg="bg-orange-500" />
       </div>
 
       <Card>

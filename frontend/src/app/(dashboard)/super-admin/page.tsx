@@ -31,11 +31,11 @@ export default function SuperAdminDashboard() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <StatsCard title="Clinics"       value={data?.counts.clinics       || 0} icon={<Building2 size={22} />}   color="bg-blue-500" />
-        <StatsCard title="Doctors"       value={data?.counts.doctors       || 0} icon={<Stethoscope size={22} />} color="bg-indigo-500" />
-        <StatsCard title="Patients"      value={data?.counts.patients      || 0} icon={<Users size={22} />}       color="bg-green-500" />
-        <StatsCard title="Pharmacies"    value={data?.counts.pharmacies    || 0} icon={<Package size={22} />}     color="bg-purple-500" />
-        <StatsCard title="Prescriptions" value={data?.counts.prescriptions || 0} icon={<FileText size={22} />}    color="bg-orange-500" />
+        <StatsCard title="Clinics"       value={data?.counts.clinics       || 0} icon={<Building2 size={20} />}   color="blue"   iconBg="bg-sky-500" />
+        <StatsCard title="Doctors"       value={data?.counts.doctors       || 0} icon={<Stethoscope size={20} />} color="purple" iconBg="bg-violet-500" />
+        <StatsCard title="Patients"      value={data?.counts.patients      || 0} icon={<Users size={20} />}       color="green"  iconBg="bg-emerald-500" />
+        <StatsCard title="Pharmacies"    value={data?.counts.pharmacies    || 0} icon={<Package size={20} />}     color="teal"   iconBg="bg-teal-500" />
+        <StatsCard title="Prescriptions" value={data?.counts.prescriptions || 0} icon={<FileText size={20} />}   color="orange" iconBg="bg-orange-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

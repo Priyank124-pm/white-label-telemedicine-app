@@ -36,7 +36,22 @@
       "Bash(git remote *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(npx tsc *)",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT email, LEFT\\(password_hash, 30\\) as hash_prefix, role FROM users LIMIT 10;\")",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT email, LEFT\\(password_hash, 60\\) as hash, role FROM users WHERE email IN \\('admin@doctorsaas.com','dr.smith@healthclinic.com','john.doe@email.com','pharmacy@healthclinic.com'\\);\")",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT email, role FROM users WHERE role IN \\('doctor','pharmacy','super_admin'\\) ORDER BY role, created_at LIMIT 15;\")",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT email, password_hash, role FROM users WHERE email IN \\('dr.sarah.johnson@healthfirst.ca','pharmacy@healthfirst.ca','admin@doctorsaas.com','john.doe@email.com'\\);\")",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e ' *)",
+      "Bash(/usr/local/mysql-8.0.46-macos15-arm64/bin/mysql -u root -pitechnolabs doctor_saas -e \"SELECT prescription_no, COALESCE\\(pdf_url,'NULL'\\) as pdf FROM prescriptions ORDER BY created_at DESC LIMIT 5;\")",
+      "Bash(lsof -i :5001 -sTCP:LISTEN)",
+      "Bash(curl -s http://localhost:5001/health)",
+      "Bash(curl -s -I -X OPTIONS http://localhost:5001/api/v1/auth/login -H \"Origin: http://localhost:3000\" -H \"Access-Control-Request-Method: POST\")",
+      "Bash(lsof -i :3000 -sTCP:LISTEN)",
+      "Bash(lsof -i :3001 -sTCP:LISTEN)",
+      "Bash(lsof -i :3002 -sTCP:LISTEN)",
+      "Bash(curl -s -X POST http://localhost:5001/api/v1/auth/login -H 'Content-Type: application/json' -H 'Origin: http://localhost:3000' -d '{\"email\":\"admin@doctorsaas.com\",\"password\":\"Admin@123\"}')",
+      "Bash(curl -s \"http://localhost:3000/api/v1/auth/login\")"
     ]
   }
 }

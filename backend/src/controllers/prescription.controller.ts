@@ -3,8 +3,6 @@ import { query } from '../config/database';
 import { AuthRequest } from '../types';
 import { createError } from '../middlewares/errorHandler';
 import { generateId, generatePrescriptionNo, paginate, buildPaginationMeta } from '../utils/helpers';
-import { generatePrescriptionPdf } from '../services/pdf.service';
-import { uploadFile } from '../services/s3.service';
 
 export async function createPrescription(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -40,43 +38,6 @@ export async function createPrescription(req: AuthRequest, res: Response, next: 
       await query(`UPDATE appointments SET status='completed' WHERE id=?`, [appointmentId]);
     }
 
-    // Generate PDF
-    try {
-      const [docInfo, patInfo, clinicInfo] = await Promise.all([
-        query<Array<{ first_name: string; last_name: string; specialization: string }>>(
-          `SELECT u.first_name, u.last_name, dp.specialization FROM users u JOIN doctor_profiles dp ON dp.user_id=u.id WHERE dp.id=?`,
-          [doctorId]
-        ),
-        query<Array<{ first_name: string; last_name: string; date_of_birth: string }>>(
-          `SELECT u.first_name, u.last_name, u.date_of_birth FROM users u JOIN patient_profiles pp ON pp.user_id=u.id WHERE pp.id=?`,
-          [patientId]
-        ),
-        tenantId ? query<Array<{ name: string }>>(`SELECT name FROM tenants WHERE id=?`, [tenantId]) : Promise.resolve([{ name: 'Doctor SaaS Clinic' }]),
-      ]);
-
-      const pdfBuffer = await generatePrescriptionPdf({
-        prescriptionNo,
-        date:        new Date().toLocaleDateString(),
-        doctorName:  `${docInfo[0].first_name} ${docInfo[0].last_name}`,
-        doctorSpec:  docInfo[0].specialization,
-        clinicName:  clinicInfo[0]?.name || 'Doctor SaaS',
-        patientName: `${patInfo[0].first_name} ${patInfo[0].last_name}`,
-        patientDob:  patInfo[0].date_of_birth || 'N/A',
-        diagnosis,
-        items: items.map((i: Record<string, string>) => ({
-          medicineName: i.medicineName,
-          dosage:       i.dosage,
-          frequency:    i.frequency,
-          duration:     i.duration,
-          instructions: i.instructions || '',
-        })),
-        notes:        notes || '',
-        followUpDate: followUpDate || '',
-      });
-
-      const { url } = await uploadFile(pdfBuffer, 'application/pdf', 'prescriptions', `${prescriptionNo}.pdf`);
-      await query(`UPDATE prescriptions SET pdf_url=? WHERE id=?`, [url, id]);
-    } catch { /* PDF generation failure shouldn't break the flow */ }
 
     const rows = await query<unknown[]>(`SELECT * FROM prescriptions WHERE id=?`, [id]);
     res.status(201).json({ success: true, message: 'Prescription created', data: rows[0] });

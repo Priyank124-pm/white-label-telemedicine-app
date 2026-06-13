@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api/v1';
 
 const api: AxiosInstance = axios.create({
   baseURL: API_URL,
@@ -119,7 +119,7 @@ export const medicineApi = {
 
 // Reports
 export const reportApi = {
-  upload:   (formData: FormData) => api.post('/reports', formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  create:   (data: object) => api.post('/reports', data),
   getAll:   (params?: object) => api.get('/reports', { params }),
   getById:  (id: string) => api.get(`/reports/${id}`),
   delete:   (id: string) => api.delete(`/reports/${id}`),

@@ -10,8 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { formatDate } from '@/lib/utils';
-import { Plus, UserPlus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
+
 
 export default function DoctorPatientsPage() {
   const [patients, setPatients] = useState<Record<string, unknown>[]>([]);
@@ -20,7 +20,7 @@ export default function DoctorPatientsPage() {
   const [search,   setSearch]   = useState('');
   const [loading,  setLoading]  = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ email: '', firstName: '', lastName: '', phone: '', dateOfBirth: '', gender: 'male', bloodGroup: 'unknown', address: '' });
+  const [form, setForm] = useState({ email: '', firstName: '', lastName: '', phone: '', gender: 'male', address: '' });
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,10 +54,8 @@ export default function DoctorPatientsPage() {
         <div><p className="font-medium text-sm">{r.first_name as string} {r.last_name as string}</p><p className="text-xs text-muted-foreground">{r.email as string}</p></div>
       </div>
     )},
-    { key: 'phone',        header: 'Phone' },
-    { key: 'date_of_birth',header: 'DOB', render: (v: unknown) => v ? formatDate(v as string) : '—' },
-    { key: 'blood_group',  header: 'Blood Group' },
-    { key: 'last_visit',   header: 'Last Visit', render: (v: unknown) => v ? formatDate(v as string) : '—' },
+    { key: 'phone',      header: 'Phone' },
+    { key: 'last_visit', header: 'Last Visit', render: (v: unknown) => v ? new Date(v as string).toLocaleDateString() : '—' },
   ];
 
   return (
@@ -72,22 +70,16 @@ export default function DoctorPatientsPage() {
           <CardHeader><CardTitle>Add New Patient</CardTitle></CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
-              {[['email','Email'],['firstName','First Name'],['lastName','Last Name'],['phone','Phone'],['dateOfBirth','Date of Birth'],['address','Address']].map(([k, l]) => (
+              {[['email','Email'],['firstName','First Name'],['lastName','Last Name'],['phone','Phone'],['address','Address']].map(([k, l]) => (
                 <div key={k} className="space-y-1">
                   <Label>{l}</Label>
-                  <Input type={k === 'dateOfBirth' ? 'date' : 'text'} value={(form as Record<string,string>)[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
+                  <Input type="text" value={(form as Record<string,string>)[k]} onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
                 </div>
               ))}
               <div className="space-y-1">
                 <Label>Gender</Label>
                 <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
                   <option value="male">Male</option><option value="female">Female</option><option value="other">Other</option>
-                </select>
-              </div>
-              <div className="space-y-1">
-                <Label>Blood Group</Label>
-                <select value={form.bloodGroup} onChange={(e) => setForm({ ...form, bloodGroup: e.target.value })} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
-                  {['unknown','A+','A-','B+','B-','AB+','AB-','O+','O-'].map((g) => <option key={g} value={g}>{g}</option>)}
                 </select>
               </div>
             </div>

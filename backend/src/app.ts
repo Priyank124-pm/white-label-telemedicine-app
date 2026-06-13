@@ -4,13 +4,17 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
 import routes from './routes';
 import { errorHandler, notFound } from './middlewares/errorHandler';
 const app = express();
 
 // Security
 console.log("process.env.FRONTEND_URL", process.env.FRONTEND_URL)
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+  crossOriginOpenerPolicy:   { policy: 'unsafe-none' },
+}));
 app.use(cors({
   origin: [process.env.FRONTEND_URL || 'http://localhost:3000'],
   credentials: true,
@@ -39,6 +43,9 @@ if (process.env.NODE_ENV !== 'test') {
 app.get('/health', (_req, res) => {
   res.json({ success: true, message: 'API is running', timestamp: new Date().toISOString() });
 });
+
+// Serve uploaded files (reports, etc.)
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // API routes
 app.use('/api/v1', routes);

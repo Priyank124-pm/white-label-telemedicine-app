@@ -8,7 +8,6 @@ import { SearchInput } from '@/components/ui/search-input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { formatDate } from '@/lib/utils';
 import { Users } from 'lucide-react';
 
 export default function PatientsPage() {
@@ -43,10 +42,8 @@ export default function PatientsPage() {
         <div><p className="font-medium">{r.first_name as string} {r.last_name as string}</p><p className="text-xs text-muted-foreground">{r.email as string}</p></div>
       </div>
     )},
-    { key: 'phone',        header: 'Phone' },
-    { key: 'date_of_birth',header: 'Date of Birth', render: (v: unknown) => v ? formatDate(v as string) : '—' },
-    { key: 'blood_group',  header: 'Blood Group' },
-    { key: 'clinic_name',  header: 'Clinic' },
+    { key: 'phone',       header: 'Phone' },
+    { key: 'clinic_name', header: 'Clinic' },
     { key: 'is_active',    header: 'Status', render: (v: unknown) => <Badge className={v ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}>{v ? 'Active' : 'Inactive'}</Badge> },
     { key: 'id', header: 'Actions', render: (v: unknown) => <Button variant="outline" size="sm" onClick={() => handleToggle(v as string)}>Toggle</Button> },
   ];

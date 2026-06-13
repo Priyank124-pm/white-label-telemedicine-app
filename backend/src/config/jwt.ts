@@ -21,9 +21,12 @@ export function signRefreshToken(payload: JwtPayload): string {
 }
 
 export function verifyAccessToken(token: string): JwtPayload {
-  return jwt.verify(token, JWT_SECRET) as JwtPayload;
+  const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload & JwtPayload;
+  return { userId: decoded.userId, email: decoded.email, role: decoded.role, tenantId: decoded.tenantId };
 }
 
 export function verifyRefreshToken(token: string): JwtPayload {
-  return jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload;
+  const decoded = jwt.verify(token, JWT_REFRESH_SECRET) as jwt.JwtPayload & JwtPayload;
+  // Strip JWT-reserved fields (exp, iat, nbf) so re-signing doesn't conflict with expiresIn option
+  return { userId: decoded.userId, email: decoded.email, role: decoded.role, tenantId: decoded.tenantId };
 }

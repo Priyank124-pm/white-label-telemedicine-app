@@ -7,12 +7,24 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3Client, S3_BUCKET } from '../config/s3';
 import { generateId } from '../utils/helpers';
 
+// Detect whether real AWS credentials are configured
+const EXAMPLE_KEY_ID = 'AKIAIOSFODNN7EXAMPLE';
+function isS3Configured(): boolean {
+  const keyId = process.env.AWS_ACCESS_KEY_ID || '';
+  const secret = process.env.AWS_SECRET_ACCESS_KEY || '';
+  return keyId.length > 0 && keyId !== EXAMPLE_KEY_ID && secret.length > 0;
+}
+
 export async function uploadFile(
   buffer: Buffer,
   mimeType: string,
   folder: string,
   originalName: string
 ): Promise<{ key: string; url: string }> {
+  if (!isS3Configured()) {
+    throw new Error('S3 not configured — skipping file upload');
+  }
+
   const ext = originalName.split('.').pop();
   const key = `${folder}/${generateId()}.${ext}`;
 

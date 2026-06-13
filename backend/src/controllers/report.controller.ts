@@ -3,36 +3,29 @@ import { query } from '../config/database';
 import { AuthRequest } from '../types';
 import { createError } from '../middlewares/errorHandler';
 import { generateId, paginate, buildPaginationMeta } from '../utils/helpers';
-import { uploadFile } from '../services/s3.service';
 
-export async function uploadReport(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+export async function createReport(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId   = req.user!.userId;
     const tenantId = req.user!.tenantId;
     const { patientId, appointmentId, reportType, title, description, reportDate } = req.body;
 
-    if (!req.file) throw createError('File is required', 400);
+    if (!patientId) throw createError('Patient is required', 400);
+    if (!title)     throw createError('Title is required', 400);
 
     const dp = await query<Array<{ id: string }>>(`SELECT id FROM doctor_profiles WHERE user_id=?`, [userId]);
     if (!dp.length) throw createError('Doctor profile not found', 404);
     const doctorId = dp[0].id;
 
-    const { url } = await uploadFile(
-      req.file.buffer,
-      req.file.mimetype,
-      'reports',
-      req.file.originalname
-    );
-
     const id = generateId();
     await query(
       `INSERT INTO medical_reports (id, tenant_id, patient_id, doctor_id, appointment_id, report_type, title, description, file_url, file_name, file_size, report_date)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [id, tenantId, patientId, doctorId, appointmentId || null, reportType || 'lab', title, description || null, url, req.file.originalname, req.file.size, reportDate || new Date().toISOString().split('T')[0]]
+       VALUES (?,?,?,?,?,?,?,?,NULL,NULL,NULL,?)`,
+      [id, tenantId, patientId, doctorId, appointmentId || null, reportType || 'lab', title, description || null, reportDate || new Date().toISOString().split('T')[0]]
     );
 
     const rows = await query<unknown[]>(`SELECT * FROM medical_reports WHERE id=?`, [id]);
-    res.status(201).json({ success: true, message: 'Report uploaded', data: rows[0] });
+    res.status(201).json({ success: true, message: 'Report created', data: rows[0] });
   } catch (err) { next(err); }
 }
 

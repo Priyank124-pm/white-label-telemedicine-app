@@ -22,6 +22,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/doctor/reports':          'Medical Reports',
   '/doctor/referrals':        'Referrals',
   '/doctor/availability':     'Set Availability',
+  '/doctor/my-site':          'My Website',
   '/patient':                 'Patient Dashboard',
   '/patient/appointments':    'My Appointments',
   '/patient/prescriptions':   'My Prescriptions',
@@ -47,11 +48,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const title = PAGE_TITLES[pathname] || 'Doctor SaaS';
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden" style={{ background: '#f1f5f9' }}>
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header title={title} />
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-6 space-y-0">
           {children}
         </main>
       </div>

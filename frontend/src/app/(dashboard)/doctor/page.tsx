@@ -27,9 +27,9 @@ export default function DoctorDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatsCard title="My Patients"         value={stats?.totalPatients       || 0} icon={<Users size={22} />}    color="bg-blue-500" />
-        <StatsCard title="Today&apos;s Appointments" value={stats?.todayAppointments   || 0} icon={<Calendar size={22} />} color="bg-green-500" />
-        <StatsCard title="Pending Appointments" value={stats?.pendingAppointments || 0} icon={<Clock size={22} />}    color="bg-orange-500" />
+        <StatsCard title="My Patients"          value={stats?.totalPatients       || 0} icon={<Users size={20} />}    color="blue"   iconBg="bg-sky-500" />
+        <StatsCard title="Today's Appointments" value={stats?.todayAppointments   || 0} icon={<Calendar size={20} />} color="green"  iconBg="bg-emerald-500" />
+        <StatsCard title="Pending Appointments" value={stats?.pendingAppointments || 0} icon={<Clock size={20} />}    color="orange" iconBg="bg-orange-500" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

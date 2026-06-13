@@ -82,12 +82,13 @@ export default function DoctorReferralsPage() {
     { key: 'urgency', header: 'Urgency', render: (v: unknown) => <Badge className={getStatusColor(v as string)}>{v as string}</Badge> },
     { key: 'status',  header: 'Status',  render: (v: unknown) => <Badge className={getStatusColor(v as string)}>{v as string}</Badge> },
     { key: 'created_at', header: 'Date', render: (v: unknown) => formatDate(v as string) },
-    { key: 'id', header: '', render: (id: unknown, r: Record<string, unknown>) => r.status === 'pending' ? (
-      <div className="flex gap-1">
-        <Button size="sm" onClick={() => updateStatus(id as string, 'accepted')}>Accept</Button>
-        <Button size="sm" variant="destructive" onClick={() => updateStatus(id as string, 'rejected')}>Reject</Button>
-      </div>
-    ) : null },
+    { key: 'id', header: '', render: (id: unknown, r: Record<string, unknown>) =>
+      r.status === 'pending' && r.referred_doctor_id === myProfileId ? (
+        <div className="flex gap-1">
+          <Button size="sm" onClick={() => updateStatus(id as string, 'accepted')}>Accept</Button>
+          <Button size="sm" variant="destructive" onClick={() => updateStatus(id as string, 'rejected')}>Reject</Button>
+        </div>
+      ) : null },
   ];
 
   const referrableDoctors = doctors.filter((d) => d.profile_id !== myProfileId);
